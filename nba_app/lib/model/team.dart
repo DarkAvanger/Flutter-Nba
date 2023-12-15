@@ -1,6 +1,6 @@
 class Team {
-  final String shortName;
+  final String abreviation;
   final String city;
 
-  Team({required this.shortName, required this.city});
+  Team({required this.abreviation, required this.city});
 }

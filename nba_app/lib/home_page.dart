@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -23,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
         for (var eachTeam in jsonData['data']) {
           final team = Team(
-            shortName: eachTeam['abbreviation'],
+            abreviation: eachTeam['abbreviation'],
             city: eachTeam['city'],
           );
           teams.add(team);
@@ -50,16 +52,24 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NBA Teams'),
+        title: const Text('NBA Teams'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: teams.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(teams[index].shortName),
-                  subtitle: Text(teams[index].city),
+                return Container(
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: Colors.grey[300],
+                  ),
+                  child: ListTile(
+                    title: Text(teams[index].abreviation),
+                    subtitle: Text(teams[index].city),
+                  ),
                 );
               },
             ),
