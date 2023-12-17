@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
           : ListView.builder(
               itemCount: teams.length,
               itemBuilder: (context, index) {
+                String name = teams[index].city;
                 return Container(
                   margin: const EdgeInsets.all(8.0),
                   padding: const EdgeInsets.all(8.0),
@@ -69,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                   child: ListTile(
                     title: Text(teams[index].abreviation),
                     subtitle: Text(teams[index].city),
+                    trailing: Image.asset('assets/$name.png'),
                   ),
                 );
               },
