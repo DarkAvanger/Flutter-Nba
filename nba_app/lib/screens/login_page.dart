@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   bool loginButtonPressed = false;
 
   @override
@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     String savedUsername =
         Provider.of<UserData>(context, listen: false).username;
     if (savedUsername.isNotEmpty) {
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(const Duration(milliseconds: 100), () {
         setState(() {
           loginButtonPressed = true;
         });
@@ -30,59 +30,53 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (Provider.of<UserData>(context).username.isNotEmpty)
-              Text(
-                'Welcome back, ${Provider.of<UserData>(context).username}!',
-                style: TextStyle(fontSize: 18),
-              ),
-            SizedBox(height: 16.0),
-            if (!loginButtonPressed)
-              Column(
-                children: [
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter Username',
+    return GestureDetector(
+      onTap: () {
+        if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Login'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (Provider.of<UserData>(context).username.isNotEmpty)
+                Text(
+                  'Welcome back, ${Provider.of<UserData>(context).username}!',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              const SizedBox(height: 16.0),
+              if (!loginButtonPressed)
+                Column(
+                  children: [
+                    TextField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter Username',
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      saveUsername(_usernameController.text, context);
-                      setState(() {
-                        loginButtonPressed = true;
-                      });
-                    },
-                    child: Text('Login'),
-                  ),
-                ],
-              ),
-            SizedBox(height: 16.0),
-            if (Provider.of<UserData>(context).username.isNotEmpty ||
-                loginButtonPressed)
-              ElevatedButton(
-                onPressed: () {
-                  if (Provider.of<UserData>(context, listen: false)
-                      .username
-                      .isNotEmpty) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  }
-                },
-                child: Text('Go to Next Screen'),
-              ),
-          ],
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        saveUsername(_usernameController.text, context);
+                        setState(() {
+                          loginButtonPressed = true;
+                        });
+                      },
+                      child: Text('Login'),
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
