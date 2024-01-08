@@ -35,47 +35,63 @@ class _LoginPageState extends State<LoginPage> {
         if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (Provider.of<UserData>(context).username.isNotEmpty)
-                Text(
-                  'Welcome back, ${Provider.of<UserData>(context).username}!',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              const SizedBox(height: 16.0),
-              if (!loginButtonPressed)
-                Column(
-                  children: [
-                    TextField(
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Enter Username',
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (Provider.of<UserData>(context).username.isNotEmpty)
+                  Text(
+                    'Welcome back, ${Provider.of<UserData>(context).username}!',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                const SizedBox(height: 16.0),
+                if (!loginButtonPressed)
+                  Column(
+                    children: [
+                      TextField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Enter Username',
+                          labelStyle: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 1.25,
+                            ),
+                          ),
+                        ),
+                        cursorColor: Colors.black,
+                        style: const TextStyle(color: Colors.black),
                       ),
-                    ),
-                    const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        saveUsername(_usernameController.text, context);
-                        setState(() {
-                          loginButtonPressed = true;
-                        });
-                      },
-                      child: Text('Login'),
-                    ),
-                  ],
-                ),
-            ],
+                      const SizedBox(height: 16.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          saveUsername(_usernameController.text, context);
+                          setState(() {
+                            loginButtonPressed = true;
+                          });
+                        },
+                        child: const Text('Login'),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),
