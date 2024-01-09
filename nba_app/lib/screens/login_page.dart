@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/user.png',
+                      "assets/User.png",
                       width: 100,
                       height: 100,
                     ),
@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 16.0),
                 Image.asset(
-                  'assets/user.png',
+                  "assets/User.png",
                   width: 80,
                   height: 80,
                 ),
@@ -161,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    SystemNavigator.pop();
                   },
                   child: const Text('Quit App'),
                 ),
