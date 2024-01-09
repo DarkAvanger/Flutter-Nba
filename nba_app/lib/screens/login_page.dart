@@ -16,8 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<UserData>(context, listen: false)
-        .setUsername('TestUser'); //Check code if Username is not empty
+    //Provider.of<UserData>(context, listen: false)
+    //.setUsername('TestUser'); //Check code if Username is not empty
     String savedUsername =
         Provider.of<UserData>(context, listen: false).username;
     if (savedUsername.isNotEmpty) {
@@ -126,21 +126,66 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showConfigurationModal(BuildContext context) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Configuration Options',
-                style: TextStyle(fontSize: 18),
-              ),
-              // Add your configuration options here
-            ],
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
           ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Configuration Options',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _showChangeUsernameDialog(context);
+                  },
+                  child: const Text('Change Username'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showChangeUsernameDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Change Username'),
+          content: TextField(
+            controller: _usernameController,
+            decoration: const InputDecoration(
+              labelText: 'Enter New Username',
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                if (_usernameController.text.isNotEmpty) {
+                  saveUsername(_usernameController.text, context);
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
         );
       },
     );
