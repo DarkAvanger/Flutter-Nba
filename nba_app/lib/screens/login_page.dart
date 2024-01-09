@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nba_app/model/userData.dart';
 import 'package:nba_app/screens/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -208,16 +209,5 @@ class _LoginPageState extends State<LoginPage> {
 
   void saveUsername(String username, BuildContext context) {
     Provider.of<UserData>(context, listen: false).setUsername(username);
-  }
-}
-
-class UserData with ChangeNotifier {
-  String _username = "";
-
-  String get username => _username;
-
-  void setUsername(String username) {
-    _username = username;
-    notifyListeners();
   }
 }
