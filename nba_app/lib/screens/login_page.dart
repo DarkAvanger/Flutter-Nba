@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   bool loginButtonPressed = false;
-  File? _userImage; // New variable to hold the user-selected image
+  File? _userImage;
 
   @override
   void initState() {
@@ -55,14 +55,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: _pickUserImage, // Handle tapping on the user image
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: _userImage != null
-                            ? FileImage(_userImage!)
-                            : AssetImage("assets/User.png") as ImageProvider,
-                      ),
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _userImage != null
+                          ? FileImage(_userImage!)
+                          : const AssetImage("assets/User.png")
+                              as ImageProvider,
                     ),
                     const SizedBox(height: 16.0),
                     if (Provider.of<UserData>(context).username.isNotEmpty)
@@ -164,11 +162,16 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 16.0),
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: _userImage != null
-                      ? FileImage(_userImage!)
-                      : AssetImage("assets/User.png") as ImageProvider,
+                GestureDetector(
+                  onTap: () {
+                    _pickUserImage(); // Handle tapping on the user image
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: _userImage != null
+                        ? FileImage(_userImage!)
+                        : const AssetImage("assets/User.png") as ImageProvider,
+                  ),
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
