@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                                 loginButtonPressed = true;
                               });
                             },
-                            child: const Text('Login'),
+                            child: const Text('Create Username'),
                           ),
                         ],
                       ),
