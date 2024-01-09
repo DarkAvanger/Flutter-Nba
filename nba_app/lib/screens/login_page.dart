@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nba_app/model/userData.dart';
 import 'package:nba_app/screens/home_page.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   bool loginButtonPressed = false;
+  File? _userImage; // New variable to hold the user-selected image
 
   @override
   void initState() {
@@ -51,10 +55,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/User.png",
-                      width: 100,
-                      height: 100,
+                    GestureDetector(
+                      onTap: _pickUserImage, // Handle tapping on the user image
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: _userImage != null
+                            ? FileImage(_userImage!)
+                            : AssetImage("assets/User.png") as ImageProvider,
+                      ),
                     ),
                     const SizedBox(height: 16.0),
                     if (Provider.of<UserData>(context).username.isNotEmpty)
@@ -127,6 +135,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void _pickUserImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _userImage = File(pickedFile.path);
+      });
+    }
+  }
+
   void _showConfigurationModal(BuildContext context) {
     showDialog(
       context: context,
@@ -145,10 +164,11 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 16.0),
-                Image.asset(
-                  "assets/User.png",
-                  width: 80,
-                  height: 80,
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: _userImage != null
+                      ? FileImage(_userImage!)
+                      : AssetImage("assets/User.png") as ImageProvider,
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton(
