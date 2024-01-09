@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nba_app/screens/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -143,11 +144,24 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 16.0),
+                Image.asset(
+                  'assets/user.png',
+                  width: 80,
+                  height: 80,
+                ),
+                const SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
                     _showChangeUsernameDialog(context);
                   },
                   child: const Text('Change Username'),
+                ),
+                const SizedBox(height: 8.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Quit App'),
                 ),
               ],
             ),
@@ -182,6 +196,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
+                SystemNavigator.pop();
               },
               child: const Text('Cancel'),
             ),
