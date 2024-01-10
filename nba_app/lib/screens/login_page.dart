@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nba_app/model/userData.dart';
 import 'package:nba_app/screens/home_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,15 +25,35 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     //Provider.of<UserData>(context, listen: false)
     //.setUsername('TestUser'); //Check code if Username is not empty
-    String savedUsername =
-        Provider.of<UserData>(context, listen: false).username;
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve and set the saved username
+    String savedUsername = prefs.getString('username') ?? '';
     if (savedUsername.isNotEmpty) {
-      Future.delayed(const Duration(milliseconds: 0), () {
-        setState(() {
-          loginButtonPressed = true;
-        });
+      Provider.of<UserData>(context, listen: false).setUsername(savedUsername);
+      setState(() {
+        loginButtonPressed = true;
       });
     }
+
+    String? imagePath = prefs.getString('userImagePath');
+    if (imagePath != null && imagePath.isNotEmpty) {
+      setState(() {
+        _userImage = File(imagePath);
+      });
+    }
+  }
+
+  void saveUserData(String username, String imagePath) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('username', username);
+
+    prefs.setString('userImagePath', imagePath);
   }
 
   @override
@@ -233,6 +254,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void saveUsername(String username, BuildContext context) {
+    String imagePath = _userImage?.path ?? '';
     Provider.of<UserData>(context, listen: false).setUsername(username);
+    saveUserData(username, imagePath);
   }
 }
