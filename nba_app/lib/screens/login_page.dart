@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nba_app/model/userData.dart';
 import 'package:nba_app/screens/home_page.dart';
+import 'package:nba_app/screens/menuSelection_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => MenuSelection()),
           );
         }
       },
