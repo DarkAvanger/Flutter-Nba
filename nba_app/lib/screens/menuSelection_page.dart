@@ -22,7 +22,7 @@ class MenuSelection extends StatelessWidget {
                       builder: (context) => const HomePage(buttonNumber: 1)),
                 );
               },
-              child: const Text('Button 1'),
+              child: const Text('Teams'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -32,7 +32,7 @@ class MenuSelection extends StatelessWidget {
                       builder: (context) => const HomePage(buttonNumber: 2)),
                 );
               },
-              child: const Text('Button 2'),
+              child: const Text('Players'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -42,7 +42,7 @@ class MenuSelection extends StatelessWidget {
                       builder: (context) => const HomePage(buttonNumber: 3)),
                 );
               },
-              child: const Text('Button 3'),
+              child: const Text('Matches'),
             ),
           ],
         ),
