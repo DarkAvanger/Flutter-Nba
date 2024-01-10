@@ -31,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
   void _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // Retrieve and set the saved username
     String savedUsername = prefs.getString('username') ?? '';
     if (savedUsername.isNotEmpty) {
       Provider.of<UserData>(context, listen: false).setUsername(savedUsername);
@@ -42,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String? imagePath = prefs.getString('userImagePath');
     if (imagePath != null && imagePath.isNotEmpty) {
+      await Future.delayed(Duration(milliseconds: 100));
       setState(() {
         _userImage = File(imagePath);
       });
@@ -257,5 +257,6 @@ class _LoginPageState extends State<LoginPage> {
     String imagePath = _userImage?.path ?? '';
     Provider.of<UserData>(context, listen: false).setUsername(username);
     saveUserData(username, imagePath);
+    _loadUserData();
   }
 }
