@@ -141,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _userImage = File(pickedFile.path);
       });
+      Navigator.pop(context);
     }
   }
 
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 16.0),
                 GestureDetector(
                   onTap: () {
-                    _pickUserImage(); // Handle tapping on the user image
+                    _pickUserImage();
                   },
                   child: CircleAvatar(
                     radius: 40,
