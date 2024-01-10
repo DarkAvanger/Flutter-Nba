@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required int buttonNumber});
+  const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();

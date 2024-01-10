@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nba_app/model/userData.dart';
-import 'package:nba_app/screens/home_page.dart';
 import 'package:nba_app/screens/login_page.dart';
 import 'package:provider/provider.dart';
 

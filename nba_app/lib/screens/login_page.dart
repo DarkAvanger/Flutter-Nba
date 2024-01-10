@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nba_app/model/userData.dart';
-import 'package:nba_app/screens/home_page.dart';
 import 'package:nba_app/screens/menuSelection_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

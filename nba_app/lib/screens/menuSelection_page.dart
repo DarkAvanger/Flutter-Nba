@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nba_app/screens/home_page.dart';
-import 'package:nba_app/screens/login_page.dart'; // Import the LoginPage
+import 'package:nba_app/screens/matches_page.dart';
+import 'package:nba_app/screens/login_page.dart';
 
 class MenuSelection extends StatelessWidget {
-  const MenuSelection({super.key});
+  const MenuSelection({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,31 +29,39 @@ class MenuSelection extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage(buttonNumber: 1)),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
               child: const Text('Teams'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50), // Set button size
+              ),
             ),
+            const SizedBox(height: 20), // Add space between buttons
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage(buttonNumber: 2)),
+                  MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
               child: const Text('Players'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50), // Set button size
+              ),
             ),
+            const SizedBox(height: 20), // Add space between buttons
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const HomePage(buttonNumber: 3)),
+                  MaterialPageRoute(builder: (context) => MatchesScreen()),
                 );
               },
               child: const Text('Matches'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 50), // Set button size
+              ),
             ),
           ],
         ),
