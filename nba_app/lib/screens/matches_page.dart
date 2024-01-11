@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class MatchesScreen extends StatefulWidget {
+  const MatchesScreen({super.key});
+
   @override
   _MatchesScreenState createState() => _MatchesScreenState();
 }
@@ -19,11 +21,13 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   Future<void> fetchMatches() async {
     final now = DateTime.now();
-    final twentyFourHoursAgo = now.subtract(const Duration(hours: 24));
+    final startDateTime = now.subtract(const Duration(days: 7));
+    final endDateTime = now.add(const Duration(days: 7));
 
     final response = await http.get(
       Uri.parse(
-          'https://www.balldontlie.io/api/v1/games?start_date=${twentyFourHoursAgo.toIso8601String()}&end_date=${now.toIso8601String()}'),
+        'https://www.balldontlie.io/api/v1/games?start_date=${startDateTime.toIso8601String()}&end_date=${endDateTime.toIso8601String()}',
+      ),
     );
 
     if (response.statusCode == 200) {
@@ -45,10 +49,6 @@ class _MatchesScreenState extends State<MatchesScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Matches (Last 24 hours):',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
           _buildMatchesList(allMatches),
         ],
       ),
@@ -66,11 +66,21 @@ class _MatchesScreenState extends State<MatchesScreen> {
           final team1Logo = 'assets/$team1City.png';
           final team2Logo = 'assets/$team2City.png';
 
-          return ListTile(
-            leading: Image.asset(team1Logo, width: 50, height: 50),
-            title: Text('vs'),
-            trailing: Image.asset(team2Logo, width: 50, height: 50),
-            subtitle: Text('Time: ${_formatTime(match['date'])}'),
+          return Container(
+            margin: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.grey,
+            ),
+            child: ListTile(
+              leading: Image.asset(team1Logo, width: 75, height: 75),
+              title: const Center(
+                child: Text('vs', style: TextStyle(fontSize: 20)),
+              ),
+              trailing: Image.asset(team2Logo, width: 75, height: 75),
+              subtitle: Text('${_formatTime(match['date'])}'),
+            ),
           );
         },
       ),
@@ -79,7 +89,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   String _formatTime(String date) {
     final parsedDate = DateTime.parse(date);
-    final formattedTime = DateFormat('hh:mm a').format(parsedDate);
+    final formattedTime = DateFormat('MMMM dd - hh:mm a').format(parsedDate);
     return formattedTime;
   }
 }
