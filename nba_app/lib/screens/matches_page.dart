@@ -39,20 +39,14 @@ class _MatchesScreenState extends State<MatchesScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Matches'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildMatchesList(allMatches),
-        ],
-      ),
-    );
+  String _extractTime(String dateTimeString) {
+    try {
+      final dateTime = DateTime.parse(dateTimeString);
+      final formattedTime = DateFormat('HH:mm').format(dateTime);
+      return formattedTime;
+    } catch (e) {
+      return dateTimeString;
+    }
   }
 
   Widget _buildMatchesList(List<dynamic> matches) {
@@ -65,6 +59,10 @@ class _MatchesScreenState extends State<MatchesScreen> {
           final team2City = match['visitor_team']['city'];
           final team1Logo = 'assets/$team1City.png';
           final team2Logo = 'assets/$team2City.png';
+
+          final formattedDate = _formatTime(match['date']);
+          final statusAndDate =
+              '$formattedDate, ${_extractTime(match['status'])}';
 
           return GestureDetector(
             onTap: () => _showMatchDetails(match),
@@ -86,7 +84,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                 trailing: Image.asset(team2Logo, width: 75, height: 75),
                 subtitle: Center(
                   child: Text(
-                    '${_formatTime(match['date'])}',
+                    statusAndDate,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -105,22 +103,39 @@ class _MatchesScreenState extends State<MatchesScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
-        return MatchDetailsTab(match: match);
+        return MatchDetailsTab(match: match, extractTime: _extractTime);
       },
     );
   }
 
-  String _formatTime(String date) {
-    final parsedDate = DateTime.parse(date);
-    final formattedTime = DateFormat('MMMM dd').format(parsedDate);
-    return formattedTime;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Matches'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildMatchesList(allMatches),
+        ],
+      ),
+    );
   }
+}
+
+String _formatTime(String date) {
+  final parsedDate = DateTime.parse(date);
+  final formattedTime = DateFormat('MMMM dd').format(parsedDate);
+  return formattedTime;
 }
 
 class MatchDetailsTab extends StatelessWidget {
   final Map<String, dynamic> match;
+  final String Function(String) extractTime;
 
-  MatchDetailsTab({required this.match});
+  MatchDetailsTab({required this.match, required this.extractTime});
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +172,7 @@ class MatchDetailsTab extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            Text('Status: ${match['status']}'),
+            Text('Status: ${extractTime(match['status'])}'),
             const SizedBox(height: 8.0),
             Text('Period: ${match['period']}'),
           ],
