@@ -34,10 +34,10 @@ class MenuSelection extends StatelessWidget {
               },
               child: const Text('Teams'),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50), // Set button size
+                minimumSize: const Size(200, 50),
               ),
             ),
-            const SizedBox(height: 20), // Add space between buttons
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -47,10 +47,10 @@ class MenuSelection extends StatelessWidget {
               },
               child: const Text('Players'),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50), // Set button size
+                minimumSize: const Size(200, 50),
               ),
             ),
-            const SizedBox(height: 20), // Add space between buttons
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -60,7 +60,7 @@ class MenuSelection extends StatelessWidget {
               },
               child: const Text('Matches'),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(200, 50), // Set button size
+                minimumSize: const Size(200, 50),
               ),
             ),
           ],

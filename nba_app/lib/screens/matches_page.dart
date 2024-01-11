@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class MatchesScreen extends StatefulWidget {
   @override
@@ -8,8 +9,7 @@ class MatchesScreen extends StatefulWidget {
 }
 
 class _MatchesScreenState extends State<MatchesScreen> {
-  List<dynamic> upcomingMatches = [];
-  List<dynamic> pastMatches = [];
+  List<dynamic> allMatches = [];
 
   @override
   void initState() {
@@ -18,33 +18,21 @@ class _MatchesScreenState extends State<MatchesScreen> {
   }
 
   Future<void> fetchMatches() async {
-    final upcomingResponse = await http.get(
-      Uri.parse(
-          'https://www.balldontlie.io/api/v1/games?start_date=${_formattedDate()}'),
-    );
-
-    if (upcomingResponse.statusCode == 200) {
-      setState(() {
-        upcomingMatches = json.decode(upcomingResponse.body)['data'];
-      });
-    }
-
-    final pastResponse = await http.get(
-      Uri.parse(
-          'https://www.balldontlie.io/api/v1/games?end_date=${_formattedDate()}'),
-    );
-
-    if (pastResponse.statusCode == 200) {
-      setState(() {
-        pastMatches = json.decode(pastResponse.body)['data'];
-      });
-    }
-  }
-
-  String _formattedDate() {
     final now = DateTime.now();
     final twentyFourHoursAgo = now.subtract(const Duration(hours: 24));
-    return twentyFourHoursAgo.toIso8601String();
+
+    final response = await http.get(
+      Uri.parse(
+          'https://www.balldontlie.io/api/v1/games?start_date=${twentyFourHoursAgo.toIso8601String()}&end_date=${now.toIso8601String()}'),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        allMatches = json.decode(response.body)['data'];
+        allMatches.sort((a, b) =>
+            DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+      });
+    }
   }
 
   @override
@@ -58,16 +46,10 @@ class _MatchesScreenState extends State<MatchesScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-            'Upcoming Matches:',
+            'Matches (Last 24 hours):',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          _buildMatchesList(upcomingMatches),
-          const SizedBox(height: 16),
-          const Text(
-            'Past Matches (last 24 hours):',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          _buildMatchesList(pastMatches),
+          _buildMatchesList(allMatches),
         ],
       ),
     );
@@ -79,12 +61,25 @@ class _MatchesScreenState extends State<MatchesScreen> {
         itemCount: matches.length,
         itemBuilder: (context, index) {
           final match = matches[index];
+          final team1City = match['home_team']['city'];
+          final team2City = match['visitor_team']['city'];
+          final team1Logo = 'assets/$team1City.png';
+          final team2Logo = 'assets/$team2City.png';
+
           return ListTile(
-            title: Text('Game ID: ${match['id']}'),
-            subtitle: Text('Date: ${match['date']}'),
+            leading: Image.asset(team1Logo, width: 50, height: 50),
+            title: Text('vs'),
+            trailing: Image.asset(team2Logo, width: 50, height: 50),
+            subtitle: Text('Time: ${_formatTime(match['date'])}'),
           );
         },
       ),
     );
+  }
+
+  String _formatTime(String date) {
+    final parsedDate = DateTime.parse(date);
+    final formattedTime = DateFormat('hh:mm a').format(parsedDate);
+    return formattedTime;
   }
 }
