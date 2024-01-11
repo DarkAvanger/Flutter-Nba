@@ -131,6 +131,15 @@ String _formatTime(String date) {
   return formattedTime;
 }
 
+String _formatTimeForDetails(String dateTimeString) {
+  try {
+    final dateTime = DateTime.parse(dateTimeString);
+    return "Game not started";
+  } catch (e) {
+    return dateTimeString;
+  }
+}
+
 class MatchDetailsTab extends StatelessWidget {
   final Map<String, dynamic> match;
   final String Function(String) extractTime;
@@ -172,7 +181,7 @@ class MatchDetailsTab extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            Text('Status: ${extractTime(match['status'])}'),
+            Text('Status: ${_formatTimeForDetails(match['status'])}'),
             const SizedBox(height: 8.0),
             Text('Period: ${match['period']}'),
           ],
