@@ -72,8 +72,8 @@ class _MatchesScreenState extends State<MatchesScreen> {
               margin: const EdgeInsets.all(8.0),
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.grey,
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.grey[300],
               ),
               child: ListTile(
                 leading: Image.asset(team1Logo, width: 75, height: 75),
@@ -131,7 +131,7 @@ class MatchDetailsTab extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset('assets/${match['home_team']['city']}.png',
-                          width: 75, height: 75),
+                          width: 125, height: 125),
                       Text('Score: ${match['home_team_score']}'),
                     ],
                   ),
@@ -141,7 +141,7 @@ class MatchDetailsTab extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset('assets/${match['visitor_team']['city']}.png',
-                          width: 75, height: 75),
+                          width: 125, height: 125),
                       Text('Score: ${match['visitor_team_score']}'),
                     ],
                   ),
