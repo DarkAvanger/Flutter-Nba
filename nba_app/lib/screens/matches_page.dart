@@ -93,7 +93,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
   void _showMatchDetails(dynamic match) {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
@@ -106,5 +106,55 @@ class _MatchesScreenState extends State<MatchesScreen> {
     final parsedDate = DateTime.parse(date);
     final formattedTime = DateFormat('MMMM dd - hh:mm a').format(parsedDate);
     return formattedTime;
+  }
+}
+
+class MatchDetailsTab extends StatelessWidget {
+  final Map<String, dynamic> match;
+
+  MatchDetailsTab({required this.match});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Match Details'),
+            const SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Image.asset('assets/${match['home_team']['city']}.png',
+                          width: 75, height: 75),
+                      Text('Score: ${match['home_team_score']}'),
+                    ],
+                  ),
+                ),
+                const Text('vs', style: TextStyle(fontSize: 20)),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Image.asset('assets/${match['visitor_team']['city']}.png',
+                          width: 75, height: 75),
+                      Text('Score: ${match['visitor_team_score']}'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            Text('Status: ${match['status']}'),
+            const SizedBox(height: 8.0),
+            Text('Period: ${match['period']}'),
+          ],
+        ),
+      ),
+    );
   }
 }
