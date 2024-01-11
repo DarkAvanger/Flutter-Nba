@@ -66,24 +66,39 @@ class _MatchesScreenState extends State<MatchesScreen> {
           final team1Logo = 'assets/$team1City.png';
           final team2Logo = 'assets/$team2City.png';
 
-          return Container(
-            margin: const EdgeInsets.all(8.0),
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Colors.grey,
-            ),
-            child: ListTile(
-              leading: Image.asset(team1Logo, width: 75, height: 75),
-              title: const Center(
-                child: Text('vs', style: TextStyle(fontSize: 20)),
+          return GestureDetector(
+            onTap: () => _showMatchDetails(match),
+            child: Container(
+              margin: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.grey,
               ),
-              trailing: Image.asset(team2Logo, width: 75, height: 75),
-              subtitle: Text('${_formatTime(match['date'])}'),
+              child: ListTile(
+                leading: Image.asset(team1Logo, width: 75, height: 75),
+                title: const Center(
+                  child: Text('vs', style: TextStyle(fontSize: 20)),
+                ),
+                trailing: Image.asset(team2Logo, width: 75, height: 75),
+                subtitle: Text('${_formatTime(match['date'])}'),
+              ),
             ),
           );
         },
       ),
+    );
+  }
+
+  void _showMatchDetails(dynamic match) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+      ),
+      builder: (BuildContext context) {
+        return MatchDetailsTab(match: match);
+      },
     );
   }
 
