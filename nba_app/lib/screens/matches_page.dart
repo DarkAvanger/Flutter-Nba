@@ -77,11 +77,19 @@ class _MatchesScreenState extends State<MatchesScreen> {
               ),
               child: ListTile(
                 leading: Image.asset(team1Logo, width: 75, height: 75),
-                title: const Center(
-                  child: Text('vs', style: TextStyle(fontSize: 20)),
+                title: Center(
+                  child: Text(
+                    'vs',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
                 trailing: Image.asset(team2Logo, width: 75, height: 75),
-                subtitle: Text('${_formatTime(match['date'])}'),
+                subtitle: Center(
+                  child: Text(
+                    '${_formatTime(match['date'])}',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             ),
           );
@@ -104,7 +112,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   String _formatTime(String date) {
     final parsedDate = DateTime.parse(date);
-    final formattedTime = DateFormat('MMMM dd - hh:mm a').format(parsedDate);
+    final formattedTime = DateFormat('MMMM dd').format(parsedDate);
     return formattedTime;
   }
 }
