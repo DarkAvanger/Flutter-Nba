@@ -1,13 +1,14 @@
 class Player {
   final String name;
+  final String team;
 
-  Player({required this.name});
+  Player({required this.name, required this.team});
 
   // Método para convertir datos JSON en un objeto Player
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       name: json['name'],
-      // Añade más campos según la respuesta de la API
+      team: json['team'],
     );
   }
 }

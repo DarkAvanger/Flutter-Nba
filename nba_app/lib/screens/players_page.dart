@@ -108,20 +108,33 @@ class PlayersListPage extends StatelessWidget {
   Future<List<Player>> getPlayers() async {
     List<Player> players = [];
     try {
-      var response =
+      var responsePlayers =
           await http.get(Uri.https('www.balldontlie.io', '/api/v1/players'));
+      var responseTeams =
+          await http.get(Uri.https('www.balldontlie.io', '/api/v1/teams'));
 
-      if (response.statusCode == 200) {
-        var jsonData = jsonDecode(response.body);
+      if (responsePlayers.statusCode == 200 &&
+          responseTeams.statusCode == 200) {
+        var jsonPlayers = jsonDecode(responsePlayers.body);
+        var jsonTeams = jsonDecode(responseTeams.body);
 
-        for (var eachPlayer in jsonData['data']) {
+        // Create a map of team abbreviations to team names
+        Map<String, String> teamAbbreviationsToNames = {};
+        for (var team in jsonTeams['data']) {
+          teamAbbreviationsToNames[team['abbreviation']] = team['city'];
+        }
+
+        for (var eachPlayer in jsonPlayers['data']) {
           final player = Player(
             name: eachPlayer['first_name'] + ' ' + eachPlayer['last_name'],
+            team:
+                teamAbbreviationsToNames[eachPlayer['team']['abbreviation']] ??
+                    'Unknown',
           );
           players.add(player);
         }
       } else {
-        print('Failed to load players: ${response.statusCode}');
+        print('Failed to load players: ${responsePlayers.statusCode}');
       }
     } catch (error) {
       print('Error loading players: $error');
