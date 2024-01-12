@@ -12,6 +12,7 @@ class MatchesScreen extends StatefulWidget {
 
 class _MatchesScreenState extends State<MatchesScreen> {
   List<dynamic> allMatches = [];
+  bool isAscendingOrder = true;
 
   @override
   void initState() {
@@ -21,8 +22,8 @@ class _MatchesScreenState extends State<MatchesScreen> {
 
   Future<void> fetchMatches() async {
     final now = DateTime.now();
-    final startDateTime = now.subtract(const Duration(days: 7));
-    final endDateTime = now.add(const Duration(days: 7));
+    final startDateTime = now.subtract(const Duration(days: 30));
+    final endDateTime = now.add(const Duration(days: 30));
 
     final response = await http.get(
       Uri.parse(
@@ -33,9 +34,16 @@ class _MatchesScreenState extends State<MatchesScreen> {
     if (response.statusCode == 200) {
       setState(() {
         allMatches = json.decode(response.body)['data'];
-        allMatches.sort((a, b) =>
-            DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+        _sortMatches();
       });
+    }
+  }
+
+  void _sortMatches() {
+    allMatches.sort((a, b) =>
+        DateTime.parse(b['date']).compareTo(DateTime.parse(a['date'])));
+    if (!isAscendingOrder) {
+      allMatches = allMatches.reversed.toList();
     }
   }
 
@@ -47,6 +55,13 @@ class _MatchesScreenState extends State<MatchesScreen> {
     } catch (e) {
       return dateTimeString;
     }
+  }
+
+  void _toggleOrder() {
+    setState(() {
+      isAscendingOrder = !isAscendingOrder;
+      _sortMatches();
+    });
   }
 
   Widget _buildMatchesList(List<dynamic> matches) {
@@ -75,7 +90,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
               ),
               child: ListTile(
                 leading: Image.asset(team1Logo, width: 75, height: 75),
-                title: Center(
+                title: const Center(
                   child: Text(
                     'vs',
                     style: TextStyle(fontSize: 20),
@@ -113,6 +128,12 @@ class _MatchesScreenState extends State<MatchesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Matches'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: _toggleOrder,
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
