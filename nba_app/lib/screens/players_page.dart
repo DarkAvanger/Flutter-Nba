@@ -24,11 +24,19 @@ class _PlayersPageState extends State<PlayersPage> {
         var jsonData = jsonDecode(response.body);
 
         for (var eachTeam in jsonData['data']) {
-          final team = Team(
-            abreviation: eachTeam['abreviation'],
-            city: eachTeam['city'],
-          );
-          teams.add(team);
+          final abbreviation = eachTeam['abbreviation'];
+          final city = eachTeam['city'];
+
+          // Check if 'abbreviation' and 'city' are not null
+          if (abbreviation != null && city != null) {
+            final team = Team(
+              abreviation: abbreviation,
+              city: city,
+            );
+            teams.add(team);
+          } else {
+            print('Team data is incomplete: $eachTeam');
+          }
         }
 
         setState(() {
