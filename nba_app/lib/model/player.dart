@@ -7,6 +7,7 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       name: json['name'],
+      // Añade más campos según la respuesta de la API
     );
   }
 }

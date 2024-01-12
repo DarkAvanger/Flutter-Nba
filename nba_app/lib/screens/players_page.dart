@@ -25,7 +25,7 @@ class _PlayersPageState extends State<PlayersPage> {
 
         for (var eachTeam in jsonData['data']) {
           final team = Team(
-            abreviation: eachTeam['abbreviation'],
+            abreviation: eachTeam['abreviation'],
             city: eachTeam['city'],
           );
           teams.add(team);
@@ -98,11 +98,27 @@ class PlayersListPage extends StatelessWidget {
       : super(key: key);
 
   Future<List<Player>> getPlayers() async {
-//Coger Jugadores de la api
-    return [
-      Player(name: 'Player 1'),
-      Player(name: 'Player 2'),
-    ];
+    List<Player> players = [];
+    try {
+      var response =
+          await http.get(Uri.https('www.balldontlie.io', '/api/v1/players'));
+
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+
+        for (var eachPlayer in jsonData['data']) {
+          final player = Player(
+            name: eachPlayer['first_name'] + ' ' + eachPlayer['last_name'],
+          );
+          players.add(player);
+        }
+      } else {
+        print('Failed to load players: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error loading players: $error');
+    }
+    return players;
   }
 
   @override
@@ -128,6 +144,7 @@ class PlayersListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(players[index].name),
+                  // Agrega más detalles del jugador según tu modelo de datos
                 );
               },
             );
