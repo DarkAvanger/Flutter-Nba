@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nba_app/screens/home_page.dart';
 import 'package:nba_app/screens/matches_page.dart';
 import 'package:nba_app/screens/login_page.dart';
+import 'package:nba_app/screens/players_page.dart';
 
 class MenuSelection extends StatelessWidget {
   const MenuSelection({Key? key});
@@ -42,7 +43,7 @@ class MenuSelection extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  MaterialPageRoute(builder: (context) => const PlayersPage()),
                 );
               },
               child: const Text('Players'),
