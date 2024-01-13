@@ -15,15 +15,33 @@ class _PlayersPageState extends State<PlayersPage> {
   List<Team> teams = [];
   bool isLoading = true;
 
-  Future<void> getTeams() async {
+  Future<void> getTeamsAndPlayers() async {
     try {
-      var response =
+      var teamsResponse =
           await http.get(Uri.https('www.balldontlie.io', '/api/v1/teams'));
+      var playersResponse =
+          await http.get(Uri.https('www.balldontlie.io', '/api/v1/players'));
 
-      if (response.statusCode == 200) {
-        var jsonData = jsonDecode(response.body);
+      if (teamsResponse.statusCode == 200 &&
+          playersResponse.statusCode == 200) {
+        var jsonTeams = jsonDecode(teamsResponse.body);
+        var jsonPlayers = jsonDecode(playersResponse.body);
 
-        for (var eachTeam in jsonData['data']) {
+        Map<String, List<Player>> teamAbbreviationToPlayers = {};
+
+        for (var eachPlayer in jsonPlayers['data']) {
+          final player = Player.fromJson(eachPlayer);
+
+          // Asocia cada jugador con su equipo
+          if (teamAbbreviationToPlayers.containsKey(player.team)) {
+            teamAbbreviationToPlayers[player.team]!.add(player);
+          } else {
+            teamAbbreviationToPlayers[player.team] = [player];
+          }
+        }
+
+        teams.clear(); // Limpia la lista de equipos antes de agregar nuevos
+        for (var eachTeam in jsonTeams['data']) {
           final abbreviation = eachTeam['abbreviation'];
           final city = eachTeam['city'];
 
@@ -31,6 +49,7 @@ class _PlayersPageState extends State<PlayersPage> {
             final team = Team(
               abreviation: abbreviation,
               city: city,
+              players: teamAbbreviationToPlayers[abbreviation] ?? [],
             );
             teams.add(team);
           } else {
@@ -42,17 +61,17 @@ class _PlayersPageState extends State<PlayersPage> {
           isLoading = false;
         });
       } else {
-        print('Failed to load teams: ${response.statusCode}');
+        print('Failed to load teams and players');
       }
     } catch (error) {
-      print('Error loading teams: $error');
+      print('Error loading teams and players: $error');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getTeams();
+    getTeamsAndPlayers();
   }
 
   @override
@@ -73,7 +92,7 @@ class _PlayersPageState extends State<PlayersPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => PlayersListPage(
-                          teamAbbreviation: teams[index].abreviation,
+                          team: teams[index],
                         ),
                       ),
                     );
@@ -99,93 +118,57 @@ class _PlayersPageState extends State<PlayersPage> {
 }
 
 class PlayersListPage extends StatelessWidget {
-  final String teamAbbreviation;
+  final Team team;
 
-  const PlayersListPage({required this.teamAbbreviation, Key? key})
-      : super(key: key);
+  const PlayersListPage({
+    required this.team,
+    Key? key,
+  }) : super(key: key);
 
-  Future<List<Player>> getPlayers() async {
-    List<Player> players = [];
-    try {
-      var responsePlayers =
-          await http.get(Uri.https('www.balldontlie.io', '/api/v1/players'));
-      var responseTeams =
-          await http.get(Uri.https('www.balldontlie.io', '/api/v1/teams'));
-
-      if (responsePlayers.statusCode == 200 &&
-          responseTeams.statusCode == 200) {
-        var jsonPlayers = jsonDecode(responsePlayers.body);
-        var jsonTeams = jsonDecode(responseTeams.body);
-
-        Map<String, String> teamAbbreviationsToNames = {};
-        for (var team in jsonTeams['data']) {
-          teamAbbreviationsToNames[team['abbreviation']] = team['city'];
-        }
-
-        for (var eachPlayer in jsonPlayers['data']) {
-          final player = Player.fromJson(eachPlayer);
-          players.add(player);
-        }
-      } else {
-        print('Failed to load players: ${responsePlayers.statusCode}');
-      }
-    } catch (error) {
-      print('Error loading players: $error');
-    }
-    return players;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Players of ${team.abreviation}'),
+      ),
+      body: ListView.builder(
+        itemCount: team.players.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: GestureDetector(
+              onTap: () {
+                _showPlayerStatsPopup(context, team.players[index]);
+              },
+              child: Text(team.players[index].name),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void _showPlayerStatsPopup(BuildContext context, Player player) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return PlayerStatsPopup(player: player);
+        return PlayerStatsPopup(
+          player: player,
+          teamName: team.city,
+        );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Players of $teamAbbreviation'),
-      ),
-      body: FutureBuilder(
-        future: getPlayers(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error loading players: ${snapshot.error}'),
-            );
-          } else {
-            List<Player> players = snapshot.data as List<Player>;
-
-            return ListView.builder(
-              itemCount: players.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: GestureDetector(
-                    onTap: () {
-                      _showPlayerStatsPopup(context, players[index]);
-                    },
-                    child: Text(players[index].name),
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
     );
   }
 }
 
 class PlayerStatsPopup extends StatelessWidget {
   final Player player;
+  final String teamName;
 
-  const PlayerStatsPopup({required this.player, Key? key}) : super(key: key);
+  const PlayerStatsPopup({
+    required this.player,
+    required this.teamName,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,16 +177,16 @@ class PlayerStatsPopup extends StatelessWidget {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Team: ${player.team}'),
+          Text('Team: $teamName'),
           Text('Height: ${player.heightFeet}\' ${player.heightInches}\"'),
           Text('Position: ${player.position}'),
-          // Agregar estadisticas restantes
+          // Agregar estadísticas restantes
         ],
       ),
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Cerrar la ventana emergente
+            Navigator.of(context).pop(); // Cerrar el pop up
           },
           child: Text('Close'),
         ),
