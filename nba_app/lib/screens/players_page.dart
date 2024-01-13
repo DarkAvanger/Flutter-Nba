@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:nba_app/model/team.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nba_app/model/player.dart';
+import 'package:nba_app/model/team.dart';
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage({Key? key}) : super(key: key);
@@ -27,7 +27,6 @@ class _PlayersPageState extends State<PlayersPage> {
           final abbreviation = eachTeam['abbreviation'];
           final city = eachTeam['city'];
 
-          // Check if 'abbreviation' and 'city' are not null
           if (abbreviation != null && city != null) {
             final team = Team(
               abreviation: abbreviation,
@@ -70,12 +69,12 @@ class _PlayersPageState extends State<PlayersPage> {
                 String name = teams[index].city;
                 return GestureDetector(
                   onTap: () {
-                    // Navegar a la pantalla de jugadores al hacer clic en un equipo
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => PlayersListPage(
-                            teamAbbreviation: teams[index].abreviation),
+                          teamAbbreviation: teams[index].abreviation,
+                        ),
                       ),
                     );
                   },
@@ -118,19 +117,13 @@ class PlayersListPage extends StatelessWidget {
         var jsonPlayers = jsonDecode(responsePlayers.body);
         var jsonTeams = jsonDecode(responseTeams.body);
 
-        // Create a map of team abbreviations to team names
         Map<String, String> teamAbbreviationsToNames = {};
         for (var team in jsonTeams['data']) {
           teamAbbreviationsToNames[team['abbreviation']] = team['city'];
         }
 
         for (var eachPlayer in jsonPlayers['data']) {
-          final player = Player(
-            name: eachPlayer['first_name'] + ' ' + eachPlayer['last_name'],
-            team:
-                teamAbbreviationsToNames[eachPlayer['team']['abbreviation']] ??
-                    'Unknown',
-          );
+          final player = Player.fromJson(eachPlayer);
           players.add(player);
         }
       } else {
@@ -140,6 +133,15 @@ class PlayersListPage extends StatelessWidget {
       print('Error loading players: $error');
     }
     return players;
+  }
+
+  void _showPlayerStatsPopup(BuildContext context, Player player) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PlayerStatsPopup(player: player);
+      },
+    );
   }
 
   @override
@@ -164,14 +166,48 @@ class PlayersListPage extends StatelessWidget {
               itemCount: players.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(players[index].name),
-                  // Agrega más detalles del jugador según tu modelo de datos
+                  title: GestureDetector(
+                    onTap: () {
+                      _showPlayerStatsPopup(context, players[index]);
+                    },
+                    child: Text(players[index].name),
+                  ),
                 );
               },
             );
           }
         },
       ),
+    );
+  }
+}
+
+class PlayerStatsPopup extends StatelessWidget {
+  final Player player;
+
+  const PlayerStatsPopup({required this.player, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(player.name),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Team: ${player.team}'),
+          Text('Height: ${player.heightFeet}\' ${player.heightInches}\"'),
+          Text('Position: ${player.position}'),
+          // Agregar estadisticas restantes
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // Cerrar la ventana emergente
+          },
+          child: Text('Close'),
+        ),
+      ],
     );
   }
 }
