@@ -4,6 +4,33 @@ import 'package:http/http.dart' as http;
 import 'package:nba_app/model/player.dart';
 import 'package:nba_app/model/team.dart';
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          backgroundColor:
+              Colors.black, // Cambia el color de fondo de la AppBar
+          foregroundColor:
+              Colors.white, // Cambia el color del texto en la AppBar
+        ),
+      ),
+      home: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/fondo_pelotas.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: PlayersPage(),
+      ),
+    );
+  }
+}
+
 class PlayersPage extends StatefulWidget {
   const PlayersPage({Key? key}) : super(key: key);
 
@@ -32,7 +59,6 @@ class _PlayersPageState extends State<PlayersPage> {
         for (var eachPlayer in jsonPlayers['data']) {
           final player = Player.fromJson(eachPlayer);
 
-          // Asocia cada jugador con su equipo
           if (teamAbbreviationToPlayers.containsKey(player.team)) {
             teamAbbreviationToPlayers[player.team]!.add(player);
           } else {
@@ -40,7 +66,7 @@ class _PlayersPageState extends State<PlayersPage> {
           }
         }
 
-        teams.clear(); // Limpia la lista de equipos antes de agregar nuevos
+        teams.clear();
         for (var eachTeam in jsonTeams['data']) {
           final abbreviation = eachTeam['abbreviation'];
           final city = eachTeam['city'];
@@ -78,14 +104,18 @@ class _PlayersPageState extends State<PlayersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NBA Teams'),
+        title: const Text(
+          'NBA Teams',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.fromARGB(255, 8, 207, 74),
+        centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: teams.length,
               itemBuilder: (context, index) {
-                String name = teams[index].city;
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -103,11 +133,26 @@ class _PlayersPageState extends State<PlayersPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       color: Colors.grey[300],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: ListTile(
-                      title: Text(teams[index].abreviation),
+                      title: Text(
+                        teams[index].abreviation,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(teams[index].city),
-                      trailing: Image.asset('assets/$name.png'),
+                      trailing: Image.asset(
+                        'assets/${teams[index].city}.png',
+                        height: 40,
+                        width: 40,
+                      ),
                     ),
                   ),
                 );
@@ -130,6 +175,7 @@ class PlayersListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Players of ${team.abreviation}'),
+        backgroundColor: Color.fromARGB(255, 8, 207, 74),
       ),
       body: ListView.builder(
         itemCount: team.players.length,
@@ -173,24 +219,41 @@ class PlayerStatsPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(player.name),
+      title: Text(
+        player.name,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Team: $teamName'),
-          Text('Height: ${player.heightFeet}\' ${player.heightInches}\"'),
-          Text('Position: ${player.position}'),
-          // Agregar estadísticas restantes
+          _buildStat('Team', teamName),
+          _buildStat(
+              'Height', '${player.heightFeet}\' ${player.heightInches}\"'),
+          _buildStat('Position', player.position),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Cerrar el pop up
+            Navigator.of(context).pop();
           },
           child: Text('Close'),
         ),
       ],
+    );
+  }
+
+  Widget _buildStat(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(value),
+        ],
+      ),
     );
   }
 }

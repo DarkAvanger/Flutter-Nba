@@ -3,8 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/fondo_pelotas.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: MatchesScreen(),
+      ),
+    );
+  }
+}
+
 class MatchesScreen extends StatefulWidget {
-  const MatchesScreen({super.key});
+  const MatchesScreen({Key? key});
 
   @override
   _MatchesScreenState createState() => _MatchesScreenState();
@@ -87,6 +112,14 @@ class _MatchesScreenState extends State<MatchesScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
                 color: Colors.grey[300],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
               child: ListTile(
                 leading: Image.asset(team1Logo, width: 75, height: 75),
@@ -101,6 +134,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                   child: Text(
                     statusAndDate,
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ),
               ),
@@ -127,7 +161,11 @@ class _MatchesScreenState extends State<MatchesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Matches'),
+        title: const Text(
+          'Matches',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.fromARGB(255, 8, 207, 74),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -175,7 +213,8 @@ class MatchDetailsTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Match Details'),
+            const Text('Match Details',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -202,9 +241,11 @@ class MatchDetailsTab extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            Text('Status: ${_formatTimeForDetails(match['status'])}'),
+            Text('Status: ${_formatTimeForDetails(match['status'])}',
+                style: TextStyle(fontSize: 16, color: Colors.grey[600])),
             const SizedBox(height: 8.0),
-            Text('Period: ${match['period']}'),
+            Text('Period: ${match['period']}',
+                style: TextStyle(fontSize: 16, color: Colors.grey[600])),
           ],
         ),
       ),

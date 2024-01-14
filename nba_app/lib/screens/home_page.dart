@@ -54,27 +54,35 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('NBA Teams'),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: teams.length,
-              itemBuilder: (context, index) {
-                String name = teams[index].city;
-                return Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: Colors.grey[300],
-                  ),
-                  child: ListTile(
-                    title: Text(teams[index].abreviation),
-                    subtitle: Text(teams[index].city),
-                    trailing: Image.asset('assets/$name.png'),
-                  ),
-                );
-              },
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/fondo_pelotas.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: teams.length,
+                itemBuilder: (context, index) {
+                  String name = teams[index].city;
+                  return Container(
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Colors.grey[300],
+                    ),
+                    child: ListTile(
+                      title: Text(teams[index].abreviation),
+                      subtitle: Text(teams[index].city),
+                      trailing: Image.asset('assets/$name.png'),
+                    ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

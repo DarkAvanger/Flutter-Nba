@@ -8,6 +8,9 @@ import 'package:nba_app/screens/menuSelection_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const String usernameKey = 'username';
+const String userImagePathKey = 'userImagePath';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -23,15 +26,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    //Provider.of<UserData>(context, listen: false)
-    //.setUsername('TestUser'); //Check code if Username is not empty
     _loadUserData();
   }
 
   void _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String savedUsername = prefs.getString('username') ?? '';
+    String savedUsername = prefs.getString(usernameKey) ?? '';
     if (savedUsername.isNotEmpty) {
       Provider.of<UserData>(context, listen: false).setUsername(savedUsername);
       setState(() {
@@ -39,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
 
-    String? imagePath = prefs.getString('userImagePath');
+    String? imagePath = prefs.getString(userImagePathKey);
     if (imagePath != null && imagePath.isNotEmpty) {
       await Future.delayed(Duration(milliseconds: 100));
       setState(() {
@@ -50,108 +51,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void saveUserData(String username, String imagePath) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString('username', username);
-
-    prefs.setString('userImagePath', imagePath);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MenuSelection()),
-          );
-        }
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: _userImage != null
-                          ? FileImage(_userImage!)
-                          : const AssetImage("assets/User.png")
-                              as ImageProvider,
-                    ),
-                    const SizedBox(height: 16.0),
-                    if (Provider.of<UserData>(context).username.isNotEmpty)
-                      Text(
-                        'Welcome back, ${Provider.of<UserData>(context).username}!',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                    const SizedBox(height: 16.0),
-                    if (!loginButtonPressed)
-                      Column(
-                        children: [
-                          TextField(
-                            controller: _usernameController,
-                            decoration: InputDecoration(
-                              labelText: 'Enter Username',
-                              labelStyle: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                              filled: true,
-                              fillColor: Colors.grey[200],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(
-                                  color: Colors.black,
-                                  width: 1.25,
-                                ),
-                              ),
-                            ),
-                            cursorColor: Colors.black,
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                          const SizedBox(height: 16.0),
-                          ElevatedButton(
-                            onPressed: () {
-                              saveUsername(_usernameController.text, context);
-                              setState(() {
-                                loginButtonPressed = true;
-                              });
-                            },
-                            child: const Text('Create Username'),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: GestureDetector(
-                onTap: () {
-                  _showConfigurationModal(context);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Icon(
-                    Icons.settings,
-                    size: 40.0,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    prefs.setString(usernameKey, username);
+    prefs.setString(userImagePathKey, imagePath);
   }
 
   void _pickUserImage() async {
@@ -189,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                     _pickUserImage();
                   },
                   child: CircleAvatar(
-                    radius: 40,
+                    radius: 60,
                     backgroundImage: _userImage != null
                         ? FileImage(_userImage!)
                         : const AssetImage("assets/User.png") as ImageProvider,
@@ -258,5 +159,118 @@ class _LoginPageState extends State<LoginPage> {
     Provider.of<UserData>(context, listen: false).setUsername(username);
     saveUserData(username, imagePath);
     _loadUserData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MenuSelection()),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/fondo_pelotas.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 70,
+                        backgroundImage: _userImage != null
+                            ? FileImage(_userImage!)
+                            : const AssetImage("assets/User.png")
+                                as ImageProvider,
+                      ),
+                      const SizedBox(height: 16.0),
+                      if (Provider.of<UserData>(context).username.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Text(
+                            'Welcome back, ${Provider.of<UserData>(context).username}!',
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                        ),
+                      const SizedBox(height: 16.0),
+                      if (!loginButtonPressed)
+                        Column(
+                          children: [
+                            TextField(
+                              controller: _usernameController,
+                              decoration: InputDecoration(
+                                labelText: 'Enter Username',
+                                labelStyle: const TextStyle(
+                                  color: Colors.grey,
+                                ),
+                                filled: true,
+                                fillColor: Colors.grey[200],
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1.25,
+                                  ),
+                                ),
+                              ),
+                              cursorColor: Colors.black,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            const SizedBox(height: 16.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                saveUsername(_usernameController.text, context);
+                                setState(() {
+                                  loginButtonPressed = true;
+                                });
+                              },
+                              child: const Text('Create Username'),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    _showConfigurationModal(context);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Icon(
+                      Icons.settings,
+                      size: 40.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

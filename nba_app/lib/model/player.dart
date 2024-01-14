@@ -17,8 +17,9 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
       name: json['first_name'] + ' ' + json['last_name'],
-      team: json['team']['abbreviation'] ?? 'Unknown',
-      heightFeet: json['height_feet'] ?? 0,
+      team: json['team']['abbreviation'] ??
+          'Unknown', //Si no tiene datos lo inicia en Unknow
+      heightFeet: json['height_feet'] ?? 0, //Si no tiene datos lo inicia en 0
       heightInches: json['height_inches'] ?? 0,
       position: json['position'] ?? 'Unknown',
     );
