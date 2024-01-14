@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String savedUsername = prefs.getString(usernameKey) ?? '';
     if (savedUsername.isNotEmpty) {
+      // ignore: use_build_context_synchronously
       Provider.of<UserData>(context, listen: false).setUsername(savedUsername);
       setState(() {
         loginButtonPressed = true;
@@ -41,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
     String? imagePath = prefs.getString(userImagePathKey);
     if (imagePath != null && imagePath.isNotEmpty) {
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(const Duration(milliseconds: 100));
       setState(() {
         _userImage = File(imagePath);
       });
@@ -62,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _userImage = File(pickedFile.path);
       });
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }
@@ -93,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundImage: _userImage != null
                         ? FileImage(_userImage!)
                         : const AssetImage("assets/User.png") as ImageProvider,
-                    backgroundColor: Color.fromARGB(255, 39, 169, 151),
+                    backgroundColor: const Color.fromARGB(255, 39, 169, 151),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -183,13 +186,13 @@ class _LoginPageState extends State<LoginPage> {
         if (Provider.of<UserData>(context, listen: false).username.isNotEmpty) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MenuSelection()),
+            MaterialPageRoute(builder: (context) => const MenuSelection()),
           );
         }
       },
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/fondo_pelotas.jpg"),
               fit: BoxFit.cover,

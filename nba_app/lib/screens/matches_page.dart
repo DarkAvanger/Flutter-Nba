@@ -1,9 +1,14 @@
+// ignore_for_file: use_key_in_widget_constructors
+// Las horas de los partidos pueden variar ya que la API envia las horas como 00:00:00 atraves de otros datos se han conseguido las horas mas proximas a las reales
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,13 +17,13 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/fondo_pelotas.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child: MatchesScreen(),
+        child: const MatchesScreen(),
       ),
     );
   }
@@ -28,6 +33,7 @@ class MatchesScreen extends StatefulWidget {
   const MatchesScreen({Key? key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MatchesScreenState createState() => _MatchesScreenState();
 }
 
@@ -113,7 +119,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 5,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -161,7 +167,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
           'NEXT MATCHES',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        backgroundColor: const Color.fromARGB(255, 39, 169, 151),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
@@ -171,7 +177,7 @@ class _MatchesScreenState extends State<MatchesScreen> {
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/fondo_pelotas.jpg"),
             fit: BoxFit.cover,
@@ -197,6 +203,7 @@ String _formatTime(String date) {
 
 String _formatTimeForDetails(String dateTimeString) {
   try {
+    // ignore: unused_local_variable
     final dateTime = DateTime.parse(dateTimeString);
     return "Game not started";
   } catch (e) {
@@ -208,7 +215,7 @@ class MatchDetailsTab extends StatelessWidget {
   final Map<String, dynamic> match;
   final String Function(String) extractTime;
 
-  MatchDetailsTab({required this.match, required this.extractTime});
+  const MatchDetailsTab({required this.match, required this.extractTime});
 
   @override
   Widget build(BuildContext context) {

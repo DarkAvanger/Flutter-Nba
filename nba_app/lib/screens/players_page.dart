@@ -11,13 +11,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
         ),
       ),
       home: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/pelotas_fondo.jpg"), // Ruta de la imagen
             fit: BoxFit.cover,
@@ -76,7 +76,7 @@ class _PlayersPageState extends State<PlayersPage> {
             );
             teams.add(team);
           } else {
-            print('Team data is incomplete: $eachTeam');
+            //print('Team data is incomplete: $eachTeam');
           }
         }
 
@@ -84,10 +84,10 @@ class _PlayersPageState extends State<PlayersPage> {
           isLoading = false;
         });
       } else {
-        print('Failed to load teams and players');
+        //print('Failed to load teams and players');
       }
     } catch (error) {
-      print('Error loading teams and players: $error');
+      //print('Error loading teams and players: $error');
     }
   }
 
@@ -105,13 +105,13 @@ class _PlayersPageState extends State<PlayersPage> {
           'NBA TEAM LINEUPS',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        backgroundColor: const Color.fromARGB(255, 39, 169, 151),
         centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/fondo_pelotas.jpg"),
                   fit: BoxFit.cover,
@@ -142,14 +142,14 @@ class _PlayersPageState extends State<PlayersPage> {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
                       child: ListTile(
                         title: Text(
                           teams[index].abreviation,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(teams[index].city),
                         trailing: Image.asset(
@@ -181,9 +181,9 @@ class PlayersListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Players of ${team.abreviation}',
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        backgroundColor: const Color.fromARGB(255, 39, 169, 151),
       ),
       body: ListView.builder(
         itemCount: team.players.length,
@@ -229,7 +229,7 @@ class PlayerStatsPopup extends StatelessWidget {
     return AlertDialog(
       title: Text(
         player.name,
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +258,7 @@ class PlayerStatsPopup extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(value),
         ],
       ),

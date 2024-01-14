@@ -1,3 +1,4 @@
+// La API no envia todos los jugadores, los disponibles estan añadidios en la APP
 class Player {
   final String name;
   final String team;

@@ -7,6 +7,7 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -35,10 +36,10 @@ class _HomePageState extends State<HomePage> {
           isLoading = false;
         });
       } else {
-        print('Failed to load teams: ${response.statusCode}');
+        //print('Failed to load teams: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error loading teams: $error');
+      //print('Error loading teams: $error');
     }
   }
 
@@ -56,11 +57,11 @@ class _HomePageState extends State<HomePage> {
           'NBA TEAMS LIST',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        backgroundColor: const Color.fromARGB(255, 39, 169, 151),
         centerTitle: true,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/fondo_pelotas.jpg"),
             fit: BoxFit.cover,
@@ -77,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: Color.fromARGB(255, 207, 207, 207),
+                      color: const Color.fromARGB(255, 207, 207, 207),
                     ),
                     child: ListTile(
                       title: Text(teams[index].abreviation),
