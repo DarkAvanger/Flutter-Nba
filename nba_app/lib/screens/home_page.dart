@@ -52,7 +52,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('NBA Teams'),
+        title: const Text(
+          'NBA TEAMS LIST',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        centerTitle: true,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -72,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.grey[300],
+                      color: Color.fromARGB(255, 207, 207, 207),
                     ),
                     child: ListTile(
                       title: Text(teams[index].abreviation),

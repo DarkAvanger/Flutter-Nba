@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -94,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                     backgroundImage: _userImage != null
                         ? FileImage(_userImage!)
                         : const AssetImage("assets/User.png") as ImageProvider,
+                    backgroundColor: Color.fromARGB(255, 39, 169, 151),
                   ),
                 ),
                 const SizedBox(height: 16.0),
@@ -102,6 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                     _showChangeUsernameDialog(context);
                   },
                   child: const Text('Change Username'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 39, 169, 151),
+                    onPrimary: Colors.black,
+                  ),
                 ),
                 const SizedBox(height: 8.0),
                 ElevatedButton(
@@ -110,6 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                     SystemNavigator.pop();
                   },
                   child: const Text('Quit App'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color.fromARGB(255, 39, 169, 151),
+                    onPrimary: Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -140,6 +148,10 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: const Text('Save'),
+              style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(255, 39, 169, 151),
+                onPrimary: Colors.black,
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -147,6 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                 SystemNavigator.pop();
               },
               child: const Text('Cancel'),
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.black,
+              ),
             ),
           ],
         );
@@ -194,6 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? FileImage(_userImage!)
                             : const AssetImage("assets/User.png")
                                 as ImageProvider,
+                        backgroundColor: Color.fromARGB(255, 39, 169, 151),
                       ),
                       const SizedBox(height: 16.0),
                       if (Provider.of<UserData>(context).username.isNotEmpty)
@@ -243,6 +259,10 @@ class _LoginPageState extends State<LoginPage> {
                                   loginButtonPressed = true;
                                 });
                               },
+                              style: ElevatedButton.styleFrom(
+                                primary: Color.fromARGB(255, 39, 169, 151),
+                                onPrimary: Colors.black,
+                              ),
                               child: const Text('Create Username'),
                             ),
                           ],
@@ -262,7 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Icon(
                       Icons.settings,
                       size: 40.0,
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 255, 255, 255),
                     ),
                   ),
                 ),

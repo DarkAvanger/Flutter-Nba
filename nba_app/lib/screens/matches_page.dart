@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -162,23 +158,32 @@ class _MatchesScreenState extends State<MatchesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Matches',
+          'NEXT MATCHES',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 8, 207, 74),
+        backgroundColor: Color.fromARGB(255, 39, 169, 151),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: _toggleOrder,
           ),
         ],
+        centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildMatchesList(allMatches),
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/fondo_pelotas.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildMatchesList(allMatches),
+          ],
+        ),
       ),
     );
   }

@@ -12,20 +12,17 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         appBarTheme: AppBarTheme(
-          backgroundColor:
-              Colors.black, // Cambia el color de fondo de la AppBar
-          foregroundColor:
-              Colors.white, // Cambia el color del texto en la AppBar
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
         ),
       ),
       home: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/fondo_pelotas.jpg"),
+            image: AssetImage("assets/pelotas_fondo.jpg"), // Ruta de la imagen
             fit: BoxFit.cover,
           ),
         ),
-        child: PlayersPage(),
       ),
     );
   }
@@ -105,58 +102,66 @@ class _PlayersPageState extends State<PlayersPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'NBA Teams',
+          'NBA TEAM LINEUPS',
           style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Color.fromARGB(255, 8, 207, 74),
+        backgroundColor: Color.fromARGB(255, 39, 169, 151),
         centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: teams.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PlayersListPage(
-                          team: teams[index],
+          : Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/fondo_pelotas.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: ListView.builder(
+                itemCount: teams.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PlayersListPage(
+                            team: teams[index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.grey[300],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          teams[index].abreviation,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(teams[index].city),
+                        trailing: Image.asset(
+                          'assets/${teams[index].city}.png',
+                          height: 40,
+                          width: 40,
                         ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Colors.grey[300],
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
                     ),
-                    child: ListTile(
-                      title: Text(
-                        teams[index].abreviation,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(teams[index].city),
-                      trailing: Image.asset(
-                        'assets/${teams[index].city}.png',
-                        height: 40,
-                        width: 40,
-                      ),
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
     );
   }
@@ -174,8 +179,11 @@ class PlayersListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Players of ${team.abreviation}'),
-        backgroundColor: Color.fromARGB(255, 8, 207, 74),
+        title: Text(
+          'Players of ${team.abreviation}',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Color.fromARGB(255, 39, 169, 151),
       ),
       body: ListView.builder(
         itemCount: team.players.length,

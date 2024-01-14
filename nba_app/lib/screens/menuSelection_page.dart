@@ -12,11 +12,14 @@ class MenuSelection extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Main Menu',
+          'MAIN MENU',
           style: TextStyle(color: Colors.black),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -24,7 +27,8 @@ class MenuSelection extends StatelessWidget {
             );
           },
         ),
-        backgroundColor: Color.fromARGB(255, 8, 207, 74),
+        backgroundColor: Color.fromARGB(255, 39, 169, 151),
+        centerTitle: true,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -86,14 +90,13 @@ class MenuSelection extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: TextStyle(
-              fontSize: 16, color: Colors.black), // Cambia a color negro
+          style: TextStyle(fontSize: 16, color: Colors.black),
         ),
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(200),
           ),
-          primary: Color.fromARGB(255, 8, 207, 74),
+          primary: Color.fromARGB(255, 39, 169, 151),
           side: BorderSide(color: Colors.black, width: 0.5),
         ),
       ),
